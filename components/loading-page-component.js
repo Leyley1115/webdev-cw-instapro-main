@@ -1,4 +1,5 @@
 import { renderHeaderComponent } from "./header-component.js";
+// import { goToPage, user } from "../index.js";
 
 /**
  * Компонент страницы загрузки.
