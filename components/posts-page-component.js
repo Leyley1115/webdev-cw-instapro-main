@@ -32,8 +32,7 @@ export function renderPostsPageComponent({ appEl }) {
             </p>
           </div>
           <p class="post-text">
-            <span class="user-name">${post.user.name}</span>
-            ${post.description}
+            <span class="user-name">${post.description}</span>
           </p>
           <p class="post-date">
             ${new Date(post.createdAt).toLocaleString()}
