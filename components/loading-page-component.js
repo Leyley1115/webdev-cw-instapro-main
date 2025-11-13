@@ -14,6 +14,7 @@ export function renderLoadingPageComponent({ appEl, user, goToPage }) {
    * HTML-разметка страницы загрузки.
    * Содержит контейнер заголовка и индикатор загрузки.
    */
+  console.log(appEl);
   const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
