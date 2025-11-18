@@ -8,7 +8,7 @@ import {
   POSTS_PAGE,
   USER_POSTS_PAGE,
 } from "./routes.js";
-import { renderPostsPageComponent, renderUserPage } from "./components/posts-page-component.js";
+import { renderPostsPageComponent} from "./components/posts-page-component.js";
 import { renderLoadingPageComponent } from "./components/loading-page-component.js";
 import {
   getUserFromLocalStorage,
@@ -68,13 +68,56 @@ export const goToPage = (newPage, data) => {
     }
 
 if (newPage === USER_POSTS_PAGE) {
-  console.log("Открываю страницу пользователя: ", data.userId);
-  page = USER_POSTS_PAGE;
-  posts = [];
-  renderUserPage(data.userId);
-  // renderApp();
-  return 
+ console.log("Открываю страницу пользователя: ", data.userId); 
+ page = USER_POSTS_PAGE; 
+ posts = []; 
+ return getPosts({ 
+  token: getToken(), 
+  host: `${postsHost}/user-posts/${data.userId}`
+  })
+  .then((result) =>{
+    posts = result; 
+    return posts; 
+  })
+  .then(() =>{ 
+    if (posts.length === 0){ 
+      element.insertAdjacentHTML("beforeend", `<p>У пользователя пока нет постов.</p>`); 
+    return;
+    }
+    console.log(posts); 
+    const appEl = document.getElementById("app"); 
+    renderPostsPageComponent({ 
+      appEl, 
+    });
+  })
+  .then(() =>{
+    const button = document.querySelectorAll(".post-likes");
+    button.forEach(el => {
+      el.insertAdjacentHTML("afterend", `<button class = "delButton">Удалить пост</button>`);
+    })
+    
+    document.querySelectorAll(".delButton").forEach(del => {
+    del.addEventListener("click", () => {
+      const postId = document.querySelector(".like-button");
+      const id = postId.dataset.postId;
+
+      fetch(`${postsHost}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: getToken(),
+        },
+      })
+      .then(() => {
+        del.closest(".post").remove();
+      })
+      .catch((error) => {
+        console.error("Ошибка при удалении:", error);
+      });
+      });
+    });
+  });
 }
+
 
     page = newPage;
     renderApp();

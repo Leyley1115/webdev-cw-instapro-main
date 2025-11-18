@@ -4,8 +4,9 @@ const personalKey = "sofia-pris";
 const baseHost = "https://webdev-hw-api.vercel.app";
 export const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
-export function getPosts({ token }) {
-  return fetch(postsHost, {
+export function getPosts({ token, host }) {
+  const url = host ? host : postsHost;
+  return fetch(url, {
     method: "GET",
     headers: {
       Authorization: token,
